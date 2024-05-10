@@ -29,7 +29,8 @@ class SpiralApp {
     }
 
     /**
-     * 
+     * Draws a spiral using half circles. The radius of each half circle is determined
+     * by the function `f(x) = ax^n` where `x` = the current circle in the loop, `a` = `coefficient`, and `n` = `degree`.
      * @param {number} x Spiral x coordinate.
      * @param {number} y Spiral y coordinate.
      * @param {number} coefficient Coefficent of the incriment function.
@@ -42,9 +43,9 @@ class SpiralApp {
         this.context.save();
         this.context.beginPath();
 
-        const startIndex = Math.ceil(startAngle / this.#PI + 0.0000000000000000001);
+        const startIndex = Math.ceil(startAngle / this.#PI);
         const endIndex = Math.ceil(endAngle / this.#PI);
-        const findRadius = (x) => { return coefficient * Math.pow(x, degree) };
+        const f = (x) => { return coefficient * Math.pow(x, degree) };
 
         console.log(endIndex);
 
@@ -52,10 +53,10 @@ class SpiralApp {
         
 
         for (let i = 1; i <= endIndex; i++) {
-            const radius = findRadius(i);
+            const radius = f(i);
             const parity = i % 2 === 0 ? 1 : -1;
 
-            centerOffset += -parity * findRadius(i - 1) + parity * radius;
+            centerOffset += -parity * f(i - 1) + parity * radius;
 
             const centerX = centerOffset * Math.cos(mainAngle) + x;
             const centerY = centerOffset * Math.sin(mainAngle) + y;
@@ -89,11 +90,47 @@ class SpiralApp {
         }
 
         this.context.stroke();
+        this.context.restore();
     }
 
-    monomialRadial() {
+    /**
+     * 
+     * @param {number} x Spiral x coordinate.
+     * @param {number} y Spiral y coordinate.
+     * @param {number} stepSize How much to increment the angle for the next point.
+     * @param {number} coefficient Coefficent of the incriment function.
+     * @param {number} degree Degree of the incriment function.
+     * @param {number} mainAngle Angle spiral rotates by in radians.
+     * @param {number} startAngle Angle spiral starts at relative to `mainAngle` in radians.
+     * @param {number} endAngle Angle spiral ends at relative to `mainAngle` in radians.
+     */
+    monomialRadial(x, y, stepSize, coefficient, degree = 1, mainAngle = 0, startAngle = 0, endAngle = this.#TWO_PI) {
+        this.context.save();
+        this.context.beginPath();
+
+        this.context.moveTo(x, y);
+
+        const f = (x) => { return coefficient * Math.pow(x, degree) };
         
+        for (let theta = startAngle; theta < endAngle; theta += stepSize) {
+            const r = f(theta);
+            const pointX = r * cos(theta + mainAngle) + x;
+            const pointY = r * sin(theta + mainAngle) + y;
+
+            this.context.lineTo(pointX, pointY);
+        }
+
+        const r = f(endAngle);
+        const pointX = r * cos(endAngle + mainAngle) + x;
+        const pointY = r * sin(endAngle + mainAngle) + y;
+
+        this.context.lineTo(pointX, pointY);
+
+        this.context.stroke();
+        this.context.restore();
     }
+
+    
 }
 
 const Spiral = new SpiralApp();

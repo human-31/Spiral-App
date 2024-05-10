@@ -8,12 +8,28 @@
 
     <style>
         * {
+            margin: 0;
+            padding: 0;
             background-color: #000;
+        }
+
+        #canvas-div {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #canvas-1 {
+            border: 2px solid #fff;
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas-1">:(</canvas>
+    <div id="canvas-div">
+        <canvas id="canvas-1">:(</canvas>
+    </div>
 
     <script src="canvas.js"></script>
     <script src="Spiral.js"></script>
