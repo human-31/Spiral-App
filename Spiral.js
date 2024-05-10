@@ -39,9 +39,14 @@ class SpiralApp {
      * @param {number} endAngle Angle spiral ends at relative to `mainAngle` in radians.
      */
     monomialHalfCircle(x, y, coefficient, degree = 1, mainAngle = 0, startAngle = 0, endAngle = this.#TWO_PI) {
-        const startIndex = Math.ceil(startAngle / this.#PI);
+        this.context.save();
+        this.context.beginPath();
+
+        const startIndex = Math.ceil(startAngle / this.#PI + 0.0000000000000000001);
         const endIndex = Math.ceil(endAngle / this.#PI);
         const findRadius = (x) => { return coefficient * Math.pow(x, degree) };
+
+        console.log(endIndex);
 
         let centerOffset = 0;
         
@@ -52,14 +57,38 @@ class SpiralApp {
 
             centerOffset += -parity * findRadius(i - 1) + parity * radius;
 
+            const centerX = centerOffset * Math.cos(mainAngle) + x;
+            const centerY = centerOffset * Math.sin(mainAngle) + y;
+
             if (i < startIndex) continue;
 
             if (parity === -1) {
-                
+                if (i === startIndex) {
+                    this.context.arc(centerX, centerY, radius,
+                        mainAngle + startAngle % this.#TWO_PI, mainAngle + this.#PI);
+                } else if (i === endIndex) {
+                    this.context.arc(centerX, centerY, radius,
+                        mainAngle, mainAngle + endAngle % this.#TWO_PI);
+                } else {
+                    this.context.arc(centerX, centerY, radius,
+                        mainAngle, mainAngle + this.#PI);
+                }
             } else {
-
+                if (i === startIndex) {
+                    this.context.arc(centerX, centerY, radius,
+                        mainAngle + this.#PI + startAngle % this.#TWO_PI, mainAngle + this.#TWO_PI);
+                } else if (i === endIndex) {
+                    this.context.arc(centerX, centerY, radius,
+                        mainAngle + this.#PI, mainAngle + this.#PI + (endAngle - this.#PI) % this.#TWO_PI);
+                        console.log(i);
+                } else {
+                    this.context.arc(centerX, centerY, radius,
+                        mainAngle + this.#PI, mainAngle + this.#TWO_PI);
+                }
             }
         }
+
+        this.context.stroke();
     }
 
     monomialRadial() {
