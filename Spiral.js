@@ -44,9 +44,21 @@ class SpiralApp {
         const findRadius = (x) => { return coefficient * Math.pow(x, degree) };
 
         let centerOffset = 0;
+        
 
-        for (let i = 0; i < 1; i++) {
+        for (let i = 1; i <= endIndex; i++) {
+            const radius = findRadius(i);
+            const parity = i % 2 === 0 ? 1 : -1;
 
+            centerOffset += -parity * findRadius(i - 1) + parity * radius;
+
+            if (i < startIndex) continue;
+
+            if (parity === -1) {
+                
+            } else {
+
+            }
         }
     }
 
