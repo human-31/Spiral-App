@@ -14,10 +14,14 @@ function init() {
     drawGrid(0, 0, canvas.width, canvas.height, 64);
 
     ctx.lineWidth = 2;
+
     ctx.strokeStyle = '#08f';
 
-    // Spiral.monomialHalfCircle(256, 256, 8, 1, 0, 0, 16 * Math.PI);
-    Spiral.monomialRadial(256, 256, 1, 8);
+    Spiral.monomialHalfCircle(256, 256, 16, 1, 0, 0, 16 * Math.PI);
+
+    ctx.strokeStyle = '#f08';
+
+    Spiral.monomialRadial(256, 256, 0.1, 16 / Math.PI, 1, 0, 0, 16 * Math.PI);
 }
 
 function render() {

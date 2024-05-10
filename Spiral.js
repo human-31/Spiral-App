@@ -29,7 +29,7 @@ class SpiralApp {
     }
 
     /**
-     * Draws a spiral using half circles. The radius of each half circle is determined
+     * Generates a spiral using half circles. The radius of each half circle is determined
      * by the function `f(x) = ax^n` where `x` = the current circle in the loop, `a` = `coefficient`, and `n` = `degree`.
      * @param {number} x Spiral x coordinate.
      * @param {number} y Spiral y coordinate.
@@ -94,7 +94,9 @@ class SpiralApp {
     }
 
     /**
-     * 
+     * Generates a spiral using the radial function `r = aθ^n`
+     * where `r` = distance from origin, `a` = `coefficient`, and `n` = `degree`.
+     * The spiral is constructed from lines, and the accuracy of the curve is controlled by `stepSize`.
      * @param {number} x Spiral x coordinate.
      * @param {number} y Spiral y coordinate.
      * @param {number} stepSize How much to increment the angle for the next point.
@@ -108,29 +110,31 @@ class SpiralApp {
         this.context.save();
         this.context.beginPath();
 
-        this.context.moveTo(x, y);
+        const f = (theta) => { return coefficient * Math.pow(theta, degree) };
 
-        const f = (x) => { return coefficient * Math.pow(x, degree) };
+        const moveR = f(startAngle);
+        const moveX = moveR * Math.cos(startAngle + mainAngle) + x;
+        const moveY = moveR * Math.sin(startAngle + mainAngle) + y;
+
+        this.context.lineTo(moveX, moveY);
         
         for (let theta = startAngle; theta < endAngle; theta += stepSize) {
             const r = f(theta);
-            const pointX = r * cos(theta + mainAngle) + x;
-            const pointY = r * sin(theta + mainAngle) + y;
+            const pointX = r * Math.cos(theta + mainAngle) + x;
+            const pointY = r * Math.sin(theta + mainAngle) + y;
 
             this.context.lineTo(pointX, pointY);
         }
 
         const r = f(endAngle);
-        const pointX = r * cos(endAngle + mainAngle) + x;
-        const pointY = r * sin(endAngle + mainAngle) + y;
+        const pointX = r * Math.cos(endAngle + mainAngle) + x;
+        const pointY = r * Math.sin(endAngle + mainAngle) + y;
 
         this.context.lineTo(pointX, pointY);
 
         this.context.stroke();
         this.context.restore();
     }
-
-    
 }
 
 const Spiral = new SpiralApp();
